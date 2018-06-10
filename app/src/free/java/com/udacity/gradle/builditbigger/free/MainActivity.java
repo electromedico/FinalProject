@@ -17,11 +17,12 @@ import com.example.jokeshower.JokeShowerActivity;
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.idlingresource.SimpleIdlingResource;
 import com.udacity.gradle.builditbigger.networkUtils.EndpointsAsyncTask;
+import com.udacity.gradle.builditbigger.networkUtils.OnTaskCompleted;
 
 import java.util.concurrent.ExecutionException;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnTaskCompleted{
     JokeProvider jokeProvider;
     @Nullable
     private SimpleIdlingResource mIdlingResource;
@@ -63,13 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         EndpointsAsyncTask endpointsAsyncTask = new EndpointsAsyncTask();
         endpointsAsyncTask.execute();
-        endpointsAsyncTask.get();
-        String joke = endpointsAsyncTask.get();
 
-        Intent intent = new Intent(this,JokeShowerActivity.class);
-        intent.putExtra(JokeShowerActivity.INTENT_JOKE,joke);
-        startActivity(intent);
-        //Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
     }
 
     @VisibleForTesting
@@ -82,4 +77,19 @@ public class MainActivity extends AppCompatActivity {
         return mIdlingResource;
     }
 
+    @Override
+    public void onTaskCompleted(String s) {
+        String joke;
+        if (s!=null){
+            joke=s;
+        }
+        else {
+            Toast.makeText(this,R.string.error,Toast.LENGTH_LONG);
+            return;
+        }
+
+        Intent intent = new Intent(this,JokeShowerActivity.class);
+        intent.putExtra(JokeShowerActivity.INTENT_JOKE,joke);
+        startActivity(intent);
+    }
 }

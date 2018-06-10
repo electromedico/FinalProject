@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.1'
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    freeImplementation 'com.google.android.gms:play-services-ads:15.0.1'
 
     implementation project(":jokeProvider")
     implementation project(":jokeshower")

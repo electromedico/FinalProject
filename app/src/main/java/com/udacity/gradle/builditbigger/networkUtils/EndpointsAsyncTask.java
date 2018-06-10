@@ -9,13 +9,25 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
+import com.udacity.gradle.builditbigger.paid.MainActivity;
 import java.io.IOException;
 
 public class EndpointsAsyncTask extends AsyncTask<Void,Void,String> {
 
     private static MyApi myApiService = null;
     private Context context;
+    private OnTaskCompleted listener;
 
+    public EndpointsAsyncTask(Context c) {
+        context= c;
+
+        if (context instanceof OnTaskCompleted){
+            listener= (OnTaskCompleted) context;
+        }
+
+
+
+    }
 
     @Override
     protected String doInBackground(Void... voids) {
@@ -38,14 +50,15 @@ public class EndpointsAsyncTask extends AsyncTask<Void,Void,String> {
         }
 
 
-
-
         try {
 
             return myApiService.tellJoke().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
-        }
-    }
+        }    }
 
+    @Override
+    protected void onPostExecute(String s) {
+        listener.onTaskCompleted(s);
+    }
 }
